@@ -1,0 +1,21 @@
+/* Empty. Add your own CSS if you like */
+.wrapper {
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    border: 0.1em solid rgb(0,0,0);
+    border-radius: 1em;
+    
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+}
+
+.my-spinner{
+	position: absolute;
+	top:20px;
+	left:50%;
+	right:50%;
+}
+
