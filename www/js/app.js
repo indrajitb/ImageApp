@@ -216,7 +216,7 @@ imageApp.directive('onLongPress', function($timeout) {
 
 
 imageApp.controller("SecureController", function($scope, $ionicHistory, $firebaseArray, $cordovaCamera, $ionicLoading, $state, $rootScope,
-  $ionicModal,  $window, $cordovaGeolocation, $ionicPopup, $document) {
+  $ionicModal,  $window, $cordovaGeolocation, $ionicPopup, $document, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicBackdrop) {
 
     $ionicHistory.clearHistory();
 
@@ -401,19 +401,64 @@ var confirmPopup;
       //$state.go("fullscreen");
     }
 
+    $scope.zoomMin = 1;
+    $scope.showImages = function(index) {
+      $scope.activeSlide = index;
+
+      var data = "data:image/jpeg;base64,";
+      var image = $scope.images[index];
+      //$scope.modal.show();
+      $scope.imgUrl = data + image.image;
+
+      $scope.showModal('templates/gallery-zoomview.html');
+    };
+ 
+    $scope.showModal = function(templateUrl) {
+      $ionicModal.fromTemplateUrl(templateUrl, {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
+    }
+ 
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+      $scope.modal.remove()
+    };
+ 
+    $scope.updateSlideStatus = function(slide) {
+
+      var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
+      if (zoomFactor == $scope.zoomMin) {
+
+        var data = "data:image/jpeg;base64,";
+        var image = $scope.images[slide];
+        $scope.imgUrl = data + image.image;
+      
+        $ionicSlideBoxDelegate.enableSlide(true);
+      } else {
+        $ionicSlideBoxDelegate.enableSlide(false);
+      }
+
+
+    };
+
+    /*
     $ionicModal.fromTemplateUrl('templates/modal.html', {
         scope: $scope
       }).then(function(modal) {
         $scope.modal = modal;
     });
   
-  $scope.openModal = function(path) {
+  $scope.openModal = function(index) {
     var data = "data:image/jpeg;base64,";
-    var image = $scope.images[path];
+    var image = $scope.images[index];
     $scope.modal.show();
     $scope.imgUrl = data + image.image;
     //$ionicLoading.show({ template: location, noBackdrop: true, duration: 2000 });
   }
+  */
 
   $scope.onHold = function() {
     //alert($scope.address);
